@@ -44,11 +44,17 @@ def slash_command(request):
     trigger_id = request.POST.get("trigger_id")
     report = request.POST.get("text")
 
-    if settings.INCIDENT_REPORT_CHANNEL_ID and channel_id != settings.INCIDENT_REPORT_CHANNEL_ID:
-        settings.SLACK_CLIENT.send_ephemeral_message(channel_id, user_id,
-                                                     f"Looks like you are trying to report an incident in the wrong "
-                                                     f"channel :thinking_face:\n"
-                                                     f"The correct place is <#{settings.INCIDENT_REPORT_CHANNEL_ID}>")
+    if (
+        settings.INCIDENT_REPORT_CHANNEL_ID
+        and channel_id != settings.INCIDENT_REPORT_CHANNEL_ID
+    ):
+        settings.SLACK_CLIENT.send_ephemeral_message(
+            channel_id,
+            user_id,
+            f"Looks like you are trying to report an incident in the wrong "
+            f"channel :thinking_face:\n"
+            f"The correct place is <#{settings.INCIDENT_REPORT_CHANNEL_ID}>",
+        )
         return HttpResponse()
 
     dialog = Dialog(
